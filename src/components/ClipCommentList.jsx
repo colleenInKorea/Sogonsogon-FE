@@ -22,7 +22,7 @@ function ClipCommentList({ props, title, id }) {
     <>
       <ClipplayCommentContainner>
         <ClipplayCommentNameDateBox>
-          <h3>{props?.membername}</h3>
+          <h3>{props?.nickname}</h3>
           <h4>{props?.content}</h4>
           <span>{dateTime}</span>
         </ClipplayCommentNameDateBox>
