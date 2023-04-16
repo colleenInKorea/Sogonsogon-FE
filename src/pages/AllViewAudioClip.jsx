@@ -32,7 +32,7 @@ function AllViewAudioClip() {
     dispatch(initInfinitiScroll());
     dispatch(__getClips({ id, page: page.current, sortBy }));
   }, [sortBy, removingClip?.clip]);
-
+  
   useEffect(() => {
     if (inView) {
       page.current += 1;
