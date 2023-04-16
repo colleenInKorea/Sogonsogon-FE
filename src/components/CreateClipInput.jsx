@@ -6,7 +6,7 @@ import Button from "../elements/Button";
 import { __createCip } from "../redux/module/createClip";
 import { __updateClip } from "../redux/module/updateClip";
 import { useNavigate, useParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 function CreateClipInputs({
   setFormformImagin,
@@ -28,6 +28,13 @@ function CreateClipInputs({
   const dispatch = useDispatch();
   const [formState, setFormState] = useState("");
   const navigate = useNavigate();
+  const { gettingClips } = useSelector((state) => state);
+
+  // console.log(gettingClips?.clip[1]?.data?.result[0]?.title);
+  // console.log(gettingClips?.clip[1]?.data?.result[0]?.contents);
+
+  // console.log(gettingClips?.clip[0]?.data?.result[0]?.title);
+  // console.log(gettingClips?.clip[0]?.data?.result[0]?.contents);
 
   useEffect(() => {
     setFormState(formcheck);
@@ -67,8 +74,8 @@ function CreateClipInputs({
       formState === "create"
         ? await dispatch(__createCip({ clipInfo: formData, audioablumId: id }))
         : await dispatch(
-          __updateClip({ clipInfo: formData, audioablumId: id })
-        );
+            __updateClip({ clipInfo: formData, audioablumId: id })
+          );
 
     if (action.payload && action.payload >= 200 && action.payload < 300) {
       navigate(-1);
@@ -208,6 +215,7 @@ const CrRadioImg = styled.img`
 const CrRadioButtonNext = styled.div`
   margin-right: 0.625rem;
   height: 9.375rem;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: flex-end;

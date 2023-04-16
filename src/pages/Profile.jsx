@@ -12,11 +12,10 @@ import Input from "../elements/Input";
 import { useForm } from "react-hook-form";
 import { getLocalStorage } from "../util/localStorage";
 import { useNavigate, useParams } from "react-router";
-import isLogin from "../util/checkCookie";
+import { ReactComponent as Edit } from "../asset/icon/edit.svg";
 
 function Profile() {
   const [formImagin, setFormformImagin] = useState(new FormData());
-  const navigate = useNavigate();
   const [preview, setPreview] = useState("");
   const { id } = useParams();
   const [pageState] = useState(false);
@@ -25,6 +24,7 @@ function Profile() {
   const dispatch = useDispatch();
   const selectBtn = useSelector((state) => state.profileButn);
   const getUserInfo = useSelector((state) => state?.gettingProfile?.profile);
+  console.log(getUserInfo);
   const modiSwitch = useSelector((state) => state?.profileButn);
 
   const onChangeimge = (e) => {
@@ -75,7 +75,7 @@ function Profile() {
           title={"프로필"}
           iconright={
             id === user.userName && !modiSwitch ? (
-              <MdOutlineModeEdit onClick={onPageModiClick} size={20} />
+              <EditButton onClick={onPageModiClick} />
             ) : null
           }
         />
@@ -95,14 +95,14 @@ function Profile() {
             <ProfileTopMembername>{getUserInfo?.nickname}</ProfileTopMembername>
           </ProfileTopnicknameMembername>
           <ProfileTopnicknameMembername>
-            <span>@{getUserInfo?.membername}</span>
+            <ProfileTopnickName>@{getUserInfo?.membername}</ProfileTopnickName>
           </ProfileTopnicknameMembername>
         </ProfileTopName>
       </ProfileTop>
       {selectBtn ? (
         <form onSubmit={handleSubmit(submitForm)}>
           <div>
-            <ProfileMidumInput>
+            <div>
               <span>닉네임 *</span>
               <ProfileMidumInputbox>
                 <Input
@@ -116,7 +116,7 @@ function Profile() {
                   }}
                 />
               </ProfileMidumInputbox>
-            </ProfileMidumInput>
+            </div>
           </div>
           <ProfileBottom>
             <div>
@@ -128,6 +128,7 @@ function Profile() {
                 asFor={"textarea"}
                 register={register}
                 type={"text"}
+                value={getUserInfo?.introduction}
                 name={"memberInfo"}
                 placeholder={"자기소개를 입력해주세요."}
                 validation={{
@@ -199,17 +200,19 @@ const ProfileTopnicknameMembername = styled.div`
   bottom: 0.625rem;
 `;
 
+const ProfileTopnickName = styled.span`
+  font-weight: 400;
+  opacity: 80%;
+`;
+
 const ProfileTopMembername = styled.span`
   font-size: 1.25rem;
-  font-weight: bolder;
+  font-weight: bold;
+  font-size: 20px;
 `;
 
 const ProfileTopName = styled.div`
   margin-top: 1.25rem;
-`;
-
-const ProfileMidumInput = styled.div`
-  margin-bottom: 3.125rem;
 `;
 
 const ProfileMidumInputbox = styled.div`
@@ -225,7 +228,7 @@ const ProfileMidumInputbox = styled.div`
 `;
 
 const ProfileBottom = styled.div`
-  margin-top: 3.125rem;
+  margin-top: 2.5rem;
 `;
 
 const ProfileBottomTitle = styled.div`
@@ -264,4 +267,8 @@ const ProfileFileInput = styled.input`
       color: ${({ theme }) => theme.color.white_col};
     }
   }
+`;
+
+const EditButton = styled(Edit)`
+  width: 25px;
 `;

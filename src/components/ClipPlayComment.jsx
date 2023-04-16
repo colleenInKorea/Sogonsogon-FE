@@ -86,7 +86,7 @@ function ClipPlayComment() {
           </ClipplayInputTitle>
           <div>
             <ClipplayInputForm onSubmit={handleSubmit(submitForm)}>
-              <Input
+              <ClipplayCommentInput
                 commentInput
                 register={register}
                 type={"text"}
@@ -100,23 +100,16 @@ function ClipPlayComment() {
                   required: "댓글을 입력해주세요.",
                 }}
               />
-              <Button smCommentBtn>
+              <ClipplayInputBtn smCommentBtn>
                 {modiComment?.modi ? "수정" : "등록"}
-              </Button>
+              </ClipplayInputBtn>
             </ClipplayInputForm>
           </div>
         </div>
         <ClipPlayCommentOverflow>
           {commentlist?.comment?.map((item, index) => {
             return item?.result?.map((item, index) => {
-              return (
-                <ClipCommentList
-                  props={item}
-                  title={commentlist?.comment[0]?.AlbumTitle}
-                  id={item.id}
-                  key={index}
-                />
-              );
+              return <ClipCommentList props={item} id={item.id} key={index} />;
             });
           })}
           <div ref={ref}></div>
@@ -147,6 +140,8 @@ const slideUp = keyframes`
 `;
 
 const ClipplayCommentBox = styled.div`
+  border-top-left-radius: 1.875rem;
+  border-top-right-radius: 1.875rem;
   height: 37.5rem;
   position: absolute;
   bottom: 0;
@@ -173,8 +168,12 @@ const ClipplayCommentTitle = styled.div`
   display: flex;
   justify-content: center;
   font-size: 1.25rem;
-  font-weight: bolder;
+  font-weight: bold;
   margin-top: 3.125rem;
+`;
+
+const ClipplayCommentInput = styled(Input)`
+  padding: 0 1.125rem;
 `;
 
 const ClipplayInputTitle = styled.div`
@@ -184,4 +183,8 @@ const ClipplayInputTitle = styled.div`
 const ClipplayInputForm = styled.form`
   display: flex;
   justify-content: center;
+`;
+
+const ClipplayInputBtn = styled(Button)`
+  color: white;
 `;
