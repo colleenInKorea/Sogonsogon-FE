@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled, { keyframes, css } from "styled-components";
 import { AiOutlineRight } from "react-icons/ai";
@@ -15,13 +15,21 @@ import { ReactComponent as NotificationsOn } from "../asset/icon/notifications_o
 import { ReactComponent as Person } from "../asset/icon/person.svg";
 import { ReactComponent as Close } from "../asset/icon/close.svg";
 import { onMessage } from "../redux/module/reduxState/sseOnMessage";
+import decryptData from "../util/decryptKey";
+import { __getProfile } from "../redux/module/getProfile";
 
 function Lnb({ isOpen, handleItemClick }) {
   const token = getCookie("access-token");
-  const username = JSON.parse(getLocalStorage("userInfo"));
+  const encryptedUserInfo = getLocalStorage("userInfo");
+  const username = decryptData(encryptedUserInfo);
   const navigate = useNavigate();
-  const sseOnMessage = useSelector((state) => state.sseOnMessaging)
+  const { sseOnMessaging, gettingProfile } = useSelector((state) => state);
   const dispatch = useDispatch();
+  useEffect(() => {
+    if (token && username) {
+      dispatch(__getProfile(username?.userName));
+    }
+  }, [isOpen]);
 
   const [items, setItems] = useState([
     { id: 1, icon: <Home />, name: "홈", link: "/" },
@@ -49,7 +57,7 @@ function Lnb({ isOpen, handleItemClick }) {
           <>
             <LnbTopContainer>
               <StCloseSvg onClick={() => handleItemClick()} />
-              {sseOnMessage ? (
+              {sseOnMessaging ? (
                 <>
                   <LnbAlarmBtnContainer>
                     <LnbNotificationsOn
@@ -57,7 +65,7 @@ function Lnb({ isOpen, handleItemClick }) {
                         document.startViewTransition(() =>
                           navigate(`/alarm/${username.userName}`)
                         );
-                        dispatch(onMessage(false))
+                        dispatch(onMessage(false));
                       }}
                     />
                   </LnbAlarmBtnContainer>
@@ -82,7 +90,7 @@ function Lnb({ isOpen, handleItemClick }) {
                 );
               }}
             >
-              <p>{username.nickName}님</p>
+              <p>{gettingProfile?.profile?.nickname}님</p>
               <StAiOutlineRight size={20} />
             </LoginTrueFalseContainer>
             <LoginHiLayout>안녕하세요!</LoginHiLayout>
@@ -170,17 +178,16 @@ const LnbTopContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-`
+`;
 const StCloseSvg = styled(Close)`
   width: 2.1875rem;
   cursor: pointer;
-`
+`;
 
 const LnbAlarmBtnContainer = styled.div`
   width: fit-content;
   height: fit-content;
-  margin-right: 1.4375rem
-  
+  margin-right: 1.4375rem;
 `;
 const LnbNotificationsOn = styled(NotificationsOn)`
   width: 1.75rem;
@@ -289,5 +296,5 @@ const MyAlbumBtn = styled.div`
 `;
 
 const StAiOutlineRight = styled(AiOutlineRight)`
- opacity: 50%;
-`
+  opacity: 50%;
+`;

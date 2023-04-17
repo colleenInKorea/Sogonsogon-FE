@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import SelectBtnContainer from "../components/SelectBtnContainer";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
@@ -39,7 +39,13 @@ function ClipList({ editClicked, state, setState, selectedContent, data }) {
               }}
             />
           )}
-          <AudioCilpImg backgroundImageUrl={data?.audioclipImageUrl} />
+          <AudioCilpImg backgroundImageUrl={data?.audioclipImageUrl}
+            onClick={() => {
+              document.startViewTransition(() =>
+                navigate(`/clipplay/${data?.id}`)
+              );
+            }}
+          />
           <AllClicpsDescLayout
             onClick={() => {
               document.startViewTransition(() =>
@@ -50,7 +56,11 @@ function ClipList({ editClicked, state, setState, selectedContent, data }) {
             <AllClicpsTitleLayout>{data?.title}</AllClicpsTitleLayout>
             <AllClicpsHeartContianer>
               <div>{dateTime}</div>
-              {data?.likeCheck === true ? <StAiFillHeart size={16} /> : <StAiOutlineHeart size={16} />}
+              {data?.likeCheck === true ? (
+                <StAiFillHeart size={16} />
+              ) : (
+                <StAiOutlineHeart size={16} />
+              )}
               <div>{data?.isLikeCount}</div>
             </AllClicpsHeartContianer>
           </AllClicpsDescLayout>
@@ -75,6 +85,7 @@ const AllClipsLayout = styled.div`
 const AudioCilpImg = styled.div`
   min-width: 4.6875rem;
   max-height: 4.6875rem;
+  cursor: pointer;
   position: relative;
   background-color: ${({ theme }) => theme.color.darkGray_col};
   border-radius: 0.625rem;
@@ -195,4 +206,3 @@ const StAiFillHeart = styled(AiFillHeart)`
   color: ${({ theme }) => theme.color.orange_col};
   margin-right: 0.3125rem;
 `;
-

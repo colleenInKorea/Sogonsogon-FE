@@ -20,6 +20,7 @@ import { __getAlbumDetail } from "../redux/module/getAlbumDetail";
 import { __likeAlbum } from "../redux/module/likeAlbum";
 import { useThrottledCallback } from "../hooks/useThrottledCallback";
 import isLogin from "../util/checkCookie";
+import Loading from "../components/Loading";
 
 function AlbumDetail() {
   const { id } = useParams();
@@ -29,6 +30,7 @@ function AlbumDetail() {
   const formattedDate = gettingAlbumDetail?.album?.data?.result?.createdAt
     ?.slice(0, 10)
     .replace(/-/g, ".");
+
   const [state, setState] = useState({
     editClicked: false,
     selectedContent: [],
@@ -60,6 +62,12 @@ function AlbumDetail() {
     [dispatch, id]
   );
 
+  if (gettingAlbumDetail?.isLoading) {
+    return <Loading />;
+  }
+
+  const imageUrl = gettingAlbumDetail?.album?.data?.result?.backgroundImageUrl;
+  // const uniqueUrl = `${imageUrl}?timestamp=${Date.now()}`
   return (
     <>
       <NavbarContainer>
@@ -77,11 +85,7 @@ function AlbumDetail() {
       </NavbarContainer>
       <AlbumDetailPgContainer>
         <AlbumDetailPgDescContainer>
-          <AlbumDetailPgImg
-            backgroundImageUrl={
-              gettingAlbumDetail?.album?.data?.result?.backgroundImageUrl
-            }
-          ></AlbumDetailPgImg>
+          <AlbumDetailPgImg backgroundImageUrl={imageUrl}></AlbumDetailPgImg>
           <AlbumDetailPgDescLayout>
             <AlbumDetailPgTitleLayout>
               {gettingAlbumDetail?.album?.data?.result?.title}
@@ -129,7 +133,7 @@ function AlbumDetail() {
             <p>앨범 소개</p>
             <span>{gettingAlbumDetail?.album?.data?.result?.instruction}</span>
             {gettingAlbumDetail?.album?.data?.result?.instruction?.length >
-              3 && (
+              84 && (
               <ExpandButtonContainer onClick={handleClick}>
                 {expanded ? (
                   <>
@@ -316,7 +320,7 @@ const ClipInfoLeftLayout = styled.div`
 
 const ClipInfoLeftSubstance = styled.div`
   margin-right: 0.3125rem;
-  font-weight: 600;
+  font-weight: bold;
   font-size: 1.25rem;
 `;
 const StContentCount = styled.span`

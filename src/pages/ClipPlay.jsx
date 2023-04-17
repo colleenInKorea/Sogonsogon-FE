@@ -18,6 +18,7 @@ import { __likeClip } from "../redux/module/likeClip";
 import { useNavigate } from "react-router-dom";
 import { ReactComponent as Forward } from "../asset/icon/15secondA.svg";
 import { ReactComponent as Back } from "../asset/icon/15secondB.svg";
+import Loading from "../components/Loading";
 
 function ClipPlay() {
   const [playing, setPlaying] = useState(false);
@@ -32,6 +33,7 @@ function ClipPlay() {
   const ClipDetail = useSelector(
     (state) => state?.gettingClipDetail?.clip?.totalCommentCount
   );
+  const ClipDetailLoading = useSelector((state) => state?.gettingClipDetail);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -80,6 +82,10 @@ function ClipPlay() {
   const albumClip = () => {
     dispatch(__likeClip(id));
   };
+
+  if (ClipDetailLoading?.isLoading) {
+    return <Loading />;
+  }
 
   return (
     <>
@@ -166,13 +172,13 @@ function ClipPlay() {
             <ClipplayForward size={50} />
           </div>
         </ClipplayPlayIcon>
-        <ClipplayComment onClick={setCommentBox}>
+        <ClipplayComments onClick={setCommentBox}>
           <div>
             <BiComment size={20} />
           </div>
           <span>댓글</span>
           <ClipplayCommentCount>{ClipDetail}</ClipplayCommentCount>
-        </ClipplayComment>
+        </ClipplayComments>
       </ClipplayContent>
     </>
   );
@@ -202,6 +208,8 @@ const ClipplayContent = styled.div`
   color: ${({ theme }) => theme.color.white_col};
   width: 100%;
   position: absolute;
+  overflow-y: scroll;
+  height: 101vh;
 `;
 
 const ClipplayTitle = styled.div`
@@ -304,7 +312,7 @@ const ClipplayForward = styled(Forward)`
   width: 3.4375rem;
 `;
 
-const ClipplayComment = styled.div`
+const ClipplayComments = styled.div`
   cursor: pointer;
   margin-top: 8.4375rem;
   display: flex;
