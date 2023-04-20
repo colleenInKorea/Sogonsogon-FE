@@ -40,21 +40,21 @@ function AllViewAudioClip() {
     }
   }, [sortBy, inView]);
 
-  const sortByLikesCoutHandler = () => {
-    setSortBy("likesCount");
+  const sortByHandler = (sortBy) => {
+    setSortBy(sortBy);
   };
-  const sortByCreatedAtHandler = () => {
-    setSortBy("createdAt");
-  };
+
   const AllContentRomoveHandler = () => {
     if (
-      window.confirm("정말로 삭제 하시겠습니까? 확인시 모든 데이터가 삭제 됩니다.")
+      window.confirm(
+        "정말로 삭제 하시겠습니까? 확인시 모든 데이터가 삭제 됩니다."
+      )
     ) {
       gettingClips?.clip?.map((item) => {
         item?.data.result?.map((data) => {
           dispatch(__removeClip(data?.id));
-        })
-      })
+        });
+      });
     } else {
     }
   };
@@ -124,9 +124,9 @@ function AllViewAudioClip() {
       </MyEditContainer>
       <StSortBtnSvg>
         {sortBy === "createdAt" ? (
-          <LatestList onClick={sortByLikesCoutHandler} />
+          <LatestList onClick={() => sortByHandler("likesCount")} />
         ) : (
-          <LikeList onClick={sortByCreatedAtHandler} />
+          <LikeList onClick={() => sortByHandler("createdAt")} />
         )}
       </StSortBtnSvg>
       <AllClipsContainer>
@@ -241,7 +241,7 @@ const StContentSlectedCount = styled.div`
   display: flex;
   flex-direction: row;
   font-weight: 600;
-  div{
+  div {
     margin-left: 1.25rem;
     font-size: 1rem;
     cursor: pointer;
@@ -251,10 +251,10 @@ const StContentSlectedCount = styled.div`
 
 const StAiOutlineArrowLeft = styled(AiOutlineArrowLeft)`
   cursor: pointer;
-  color:${({ theme }) => theme.color.softBlack_col};
-`
+  color: ${({ theme }) => theme.color.softBlack_col};
+`;
 
 const StAiOutlinePlus = styled(AiOutlinePlus)`
-  cursor:pointer;
-  color:${({ theme }) => theme.color.orange_col};
-`
+  cursor: pointer;
+  color: ${({ theme }) => theme.color.orange_col};
+`;
