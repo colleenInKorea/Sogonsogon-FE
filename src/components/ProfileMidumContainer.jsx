@@ -3,13 +3,12 @@ import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import Button from "../elements/Button";
 import { __userFollow } from "../redux/module/userFollow";
-import { __getProfile } from "../redux/module/getProfile";
+import { __getProfile, resetProfile } from "../redux/module/getProfile";
 import { __getFollow } from "../redux/module/getFollow";
 import { useParams } from "react-router-dom";
 import { getLocalStorage } from "../util/localStorage";
 import { useThrottledCallback } from "../hooks/useThrottledCallback";
 import decryptData from "../util/decryptKey";
-import Loading from "../components/Loading";
 
 function ProfileMidumContainer() {
   const dispatch = useDispatch();
@@ -27,6 +26,10 @@ function ProfileMidumContainer() {
   const userFollow = useSelector((state) => state?.userFollowing);
 
   useEffect(() => {
+    dispatch(resetProfile(null));
+  }, []);
+
+  useEffect(() => {
     dispatch(__getProfile(id));
     dispatch(__getFollow(id));
   }, [updateUserInfo, userFollow]);
@@ -38,14 +41,6 @@ function ProfileMidumContainer() {
     1000,
     [dispatch, id]
   );
-
-  if (getUserInfoLoding?.isLoading) {
-    return (
-      <ProfileLoding>
-        <Loading />
-      </ProfileLoding>
-    );
-  }
 
   return (
     <>
